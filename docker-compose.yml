@@ -50,7 +50,7 @@ services:
 
 networks:
   default:
-    name: ugenda_conta_default
+    name: whatsapi_default
     external: true
   ugenda_wapp_default:
     external: true
