@@ -1,0 +1,52 @@
+name: Build and Push Docker Image (CONTA)
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docker-compose.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Login no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Definir versão
+        id: version
+        run: echo "VERSION=${{ github.run_number }}" >> $GITHUB_OUTPUT
+
+      - name: Build da imagem
+        run: docker build -t leandrojmolina/whatsapi26:${{ steps.version.outputs.VERSION }} .
+
+      - name: Push da imagem
+        run: docker push leandrojmolina/whatsapi26:${{ steps.version.outputs.VERSION }}
+
+      - name: Atualizar docker-compose
+        run: |
+          sed -i "s|image: leandrojmolina/whatsapi26:.*|image: leandrojmolina/whatsapi26:${{ steps.version.outputs.VERSION }}|g" docker-compose.yml
+          cat docker-compose.yml
+
+      - name: Commit alteração compose
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docker-compose.yml
+          git diff --cached --quiet || git commit -m "update ugenda-conta version [skip ci]"
+          git push origin main
