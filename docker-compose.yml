@@ -3,7 +3,7 @@ version: '3.8'
 services:
   whatsapi:
     # build: .
-    image: leandrojmolina/whatsapi26:5
+    image: leandrojmolina/whatsapi26:6
     container_name: whatsapi
     restart: always
     ports:
