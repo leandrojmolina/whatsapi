@@ -3,7 +3,7 @@ version: '3.8'
 services:
   whatsapi:
     # build: .
-    image: leandrojmolina/whatsapi26:9
+    image: leandrojmolina/whatsapi26:8
     container_name: whatsapi
     restart: always
     ports:
@@ -11,7 +11,7 @@ services:
     environment:
       - ENABLE_WEBHOOK=TRUE
       - API_KEY=c27b0f20-50e8-4557-a59f-b956b37eb5ea  # OPTIONAL
-      - BASE_WEBHOOK_URL=https://adm.ugenda.com.br
+      - BASE_WEBHOOK_URL=https://adm.ugenda.com.br/api/whatsapp/webhook
       - ENABLE_LOCAL_CALLBACK_EXAMPLE=TRUE # OPTIONAL, NOT RECOMMENDED FOR PRODUCTION
       - MAX_ATTACHMENT_SIZE=5000000 # IN BYTES
       - SET_MESSAGES_AS_SEEN=TRUE # WILL MARK THE MESSAGES AS READ AUTOMATICALLY
